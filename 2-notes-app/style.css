@@ -183,22 +183,25 @@ hr {
 .note {
     width: 12.5rem;
     min-height: 12.5rem;
-    background-color: white;
+    background-color: rgb(255, 248, 217);
     padding: 10px;
     border-radius: 4px;
     transform: rotateZ(4deg);
     cursor: pointer;
     position: relative;
     color: #565656;
+    box-shadow: 1px 1px 1px 1px #008cbb;
 }
 
 .note:nth-child(2n) {
     transform: rotate(-4deg);
-    background-color: #c6d4f6;
+    background-color: #b6baff;
 }
 
 .note:hover {
     transform: rotate(0deg);
+    scale: 1.2;
+    z-index: 1;
 }
 
 .note>p {

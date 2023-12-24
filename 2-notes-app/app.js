@@ -8,17 +8,17 @@ let addNew = `<form action="" class="form">
 				</form>`
 let myNotes = `<div class="notes">
 		<div class="note">
-			<p contenteditable>Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, tenetur!</p>
+			<p contenteditable spellcheck="false">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, tenetur!</p>
 		</div>
 		<div class="note">
-			<p contenteditable>Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores,
+			<p contenteditable spellcheck="false">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores,
 				tenetur!</p>
 		</div>
 		<div class="note">
-			<p contenteditable>Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, tenetur!</p>
+			<p contenteditable spellcheck="false">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, tenetur!</p>
 		</div>
 		<div class="note">
-			<p contenteditable>Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, tenetur!</p>
+			<p contenteditable spellcheck="false">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, tenetur!</p>
 		</div>
 			</div>`
 
