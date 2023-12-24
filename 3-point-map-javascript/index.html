@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>JavaScript Point Map</title>
+	<style type="text/css">
+		html,
+		body,
+		#container {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+	<script src="https://cdn.anychart.com/releases/8.12.0/js/anychart-core.min.js"></script>
+	<script src="https://cdn.anychart.com/releases/8.12.0/js/anychart-map.min.js"></script>
+	<script src="https://cdn.anychart.com/releases/8.12.0/geodata/custom/world/world.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js"></script>
+	<script src="https://cdn.anychart.com/releases/8.12.0/js/anychart-data-adapter.min.js"></script>
+	<script src="https://cdn.anychart.com/releases/8.12.0/js/anychart-ui.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdn.anychart.com/releases/8.12.0/css/anychart-ui.min.css" />
+	<link rel="stylesheet" type="text/css"
+		href="https://cdn.anychart.com/releases/8.12.0/fonts/css/anychart-font.min.css" />
+</head>
+
+<body>
+	<div id="container"></div>
+	<script>
+		anychart.onDocumentReady(function () {
+			// load data from a json file
+			anychart.data.loadJsonFile("https://gist.githubusercontent.com/awanshrestha/9e91dbd3ac4626446cd84f8be97016ae/raw/160d5ab2da59a5264e716dcbe3239ce7ac9104b6/Wealthiest%2520Cities%25202023.json",
+				function (data) {
+					// create a map chart
+					var map = anychart.map();
+					// set the global map geodata
+					map.geoData("anychart.maps.world");
+					// add zoom ui controls
+					var zoomController = anychart.ui.zoom();
+					zoomController.render(map);
+					// set the land area color
+					map.unboundRegions()
+						.enabled(true)
+						.fill('#E1E1E1')
+						.stroke('#D2D2D2');
+					// set the background color
+					map.background()
+						.fill({
+							color: '#daedea',
+							opacity: 0.5
+						});
+					// create a dataset from data
+					var citiesDataSet = anychart.data.set(data).mapAs({ size: "Billionaires" });
+					// helper function to create several series
+					var createSeries = function (name, data, color) {
+						// set the bubble series
+						var series = map.bubble(data);
+						// set the max and min bubble sizes
+						map.maxBubbleSize(20);
+						map.minBubbleSize(3);
+						// configure the series settings
+						series
+							.name(name)
+							.type("circle")
+							.fill(color)
+							.stroke(anychart.color.darken(color, 0.4))
+							.labels(false);
+						// configure the series legend items
+						series
+							.legendItem()
+							.iconType("circle")
+							.iconFill(color)
+							.iconStroke(anychart.color.darken(color, 0.4))
+					};
+					// create 5 series, filtering the data by number of millionaires
+					createSeries(
+						"Over 100,000",
+						citiesDataSet.filter("Millionaires", filterFunction(100000, 1000000)),
+						"#D1FAE9"
+					);
+					createSeries(
+						"50,000–100,000",
+						citiesDataSet.filter("Millionaires", filterFunction(50000, 100000)),
+						"#9CE0E5"
+					);
+					createSeries(
+						"10,000–50,000",
+						citiesDataSet.filter("Millionaires", filterFunction(10000, 50000)),
+						"#00ACC3"
+					);
+					createSeries(
+						"1,000–10,000",
+						citiesDataSet.filter("Millionaires", filterFunction(1000, 10000)),
+						"#355CB1"
+					);
+					createSeries(
+						"Up to 1,000",
+						citiesDataSet.filter("Millionaires", filterFunction(0, 1000)),
+						"#002D79"
+					);
+					// add a legend
+					map.legend(true);
+					// configure the map tooltip
+					map.tooltip()
+						.useHtml(true)
+						.titleFormat(function () {
+							return this.getData("name") +
+								" (" +
+								this.getData("Country") +
+								")";
+						})
+						.format(function () {
+							return (
+								"<span style='color: #bfbfbf'>Millionaires: </span>" +
+								this.getData("Millionaires") +
+								"<br/>" +
+								"<span style='color: #bfbfbf'>Centimillionaires: </span>" +
+								this.getData("Centimillionaires") +
+								"<br/>" +
+								"<span style='color: #bfbfbf'>Billionaires: </span>" +
+								this.getData("Billionaires")
+							);
+						});
+					// set a title
+					map.title()
+						.enabled(true)
+						.useHtml(true)
+						.text(
+							"Wealthiest Cities<br/>" +
+							"<span style='color: #929292; font-size: 12px;'>" +
+							"Based on the number of millionaires</span>"
+						);
+					// specify a container
+					map.container("container");
+					// draw the resulting map
+					map.draw();
+				}
+			);
+		});
+		// helper filter function
+		function filterFunction(val1, val2) {
+			if (val2) {
+				return function (fieldVal) {
+					return val1 <= fieldVal && fieldVal < val2;
+				};
+			}
+			return function (fieldVal) {
+				return val1 <= fieldVal;
+			};
+		}
+	</script>
+</body>
+
+</html>
